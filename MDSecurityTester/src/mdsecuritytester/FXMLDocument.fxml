@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mdsecuritytester.FXMLDocumentController">
+  <tabs>
+    <Tab text="HL7 Scanner">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Label layoutX="14.0" layoutY="34.0" prefHeight="17.0" prefWidth="108.0" text="IP address" />
+                  <TextField fx:id="hl7scanner_ip_address_textField" layoutX="99.0" layoutY="29.0" prefHeight="27.0" prefWidth="189.0" promptText="IPv4 address" />
+                  <Label layoutX="338.0" layoutY="34.0" prefHeight="17.0" prefWidth="33.0" text="Port" />
+                  <TextField fx:id="hl7scanner_port_textField" layoutX="382.0" layoutY="29.0" prefHeight="27.0" prefWidth="195.0" promptText="Leave blank to scan all ports" />
+                  <TextField fx:id="hl7scanner_timeout_textField" layoutX="99.0" layoutY="73.0" prefHeight="27.0" prefWidth="190.0" promptText="In seconds" text="1" />
+                  <Label layoutX="14.0" layoutY="78.0" prefHeight="17.0" prefWidth="68.0" text="Timeout" />
+                  <Button fx:id="hl7scanner_scan_btn" layoutX="382.0" layoutY="73.0" mnemonicParsing="false" onAction="#onClickStartScanningAction" text="Scan" />
+                  <TextArea fx:id="hl7scanner_console_textField" layoutX="14.0" layoutY="123.0" prefHeight="400.0" prefWidth="770.0" />
+                  <Button fx:id="hl7scanner_clear_btn" layoutX="450.0" layoutY="73.0" mnemonicParsing="false" onAction="#onClickClearConsoleAction" text="Clear" />
+               </children></AnchorPane>
+      </content>
+    </Tab>
+    <Tab text="HL7 Messenger">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Label layoutX="14.0" layoutY="14.0" text="Message" />
+                  <TextArea fx:id="hl7messenger_console_textField" layoutX="15.0" layoutY="40.0" prefHeight="200.0" prefWidth="770.0" />
+                  <Label layoutX="14.0" layoutY="252.0" prefHeight="17.0" prefWidth="76.0" text="IP address" />
+                  <TextField fx:id="hl7messenger_ip_address_textField" layoutX="90.0" layoutY="247.0" prefHeight="27.0" prefWidth="177.0" />
+                  <TextField fx:id="hl7messenger_port_textField" layoutX="344.0" layoutY="247.0" prefHeight="27.0" prefWidth="84.0" />
+                  <Label layoutX="302.0" layoutY="252.0" text="Port" />
+                  <Label layoutX="457.0" layoutY="252.0" prefHeight="17.0" prefWidth="50.0" text="Repeat" />
+                  <TextField fx:id="hl7messenger_repeat_textField" layoutX="507.0" layoutY="247.0" prefHeight="27.0" prefWidth="49.0" promptText="sec" />
+                  <Button fx:id="hl7messenger_messageSend_btn" layoutX="601.0" layoutY="247.0" mnemonicParsing="false" onAction="#onClickSendMessageAction" text="Send" />
+                  <Label layoutX="14.0" layoutY="300.0" text="Response" />
+                  <TextArea fx:id="hl7messenger_response_console_textField" layoutX="15.0" layoutY="325.0" prefHeight="200.0" prefWidth="770.0" />
+                  <Button layoutX="737.0" layoutY="247.0" mnemonicParsing="false" text="Stop" />
+                  <Button fx:id="hl7messenger_clear_response_console_btn" layoutX="665.0" layoutY="247.0" mnemonicParsing="false" onAction="#hl7messenger_onClickClearConsoleAction" text="Clear" />
+               </children></AnchorPane>
+      </content>
+    </Tab>
+      <Tab text="HL7 Server">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Label layoutX="14.0" layoutY="53.0" text="Port " />
+                  <TextField fx:id="hl7server_port_textField" layoutX="60.0" layoutY="48.0" />
+                  <Button layoutX="256.0" layoutY="48.0" mnemonicParsing="false" onAction="#hl7server_onClickStartServer" text="Start / Restart" />
+                  <Button fx:id="hl7server_btn_stop" layoutX="377.0" layoutY="48.0" mnemonicParsing="false" onAction="#hl7server_onClickStopServer" text="Stop" />
+                  <TextArea fx:id="hl7server_message_textField" layoutX="14.0" layoutY="84.0" prefHeight="200.0" prefWidth="760.0" />
+                  <TextArea fx:id="hl7server_console_textField" layoutX="14.0" layoutY="327.0" prefHeight="200.0" prefWidth="760.0" />
+                  <Label layoutX="14.0" layoutY="298.0" prefHeight="17.0" prefWidth="104.0" text="Console output" />
+               </children></AnchorPane>
+        </content>
+      </Tab>
+  </tabs>
+</TabPane>
