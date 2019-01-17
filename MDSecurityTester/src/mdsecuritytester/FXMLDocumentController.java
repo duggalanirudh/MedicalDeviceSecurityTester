@@ -9,13 +9,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Base64;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+
 
 /**
  *
@@ -81,44 +85,10 @@ public class FXMLDocumentController implements Initializable {
     String HL7ScannerPythonScriptName = "HL7Scanner.py";
     String HL7MessengerPythonScriptName = "HL7Messenger.py";
     String HL7ServerPythonScriptName = "HL7Server.py";
+    String Helper_Eval_Script = "Eval.py";
     
     //universal runtime declaration
     Runtime runtimeProcess = Runtime.getRuntime();
-    /*
-    @FXML
-    void onClickStartScanningAction(ActionEvent event) {
-        
-        String ip_address = hl7scanner_ip_address_textField.getText();
-        String timeout = hl7scanner_timeout_textField.getText();
-        String port = hl7scanner_port_textField.getText();
-        
-        //System.out.println(ip_address);
-        //System.out.println(timeout);
-        //System.out.println(port);
-        
-        try
-        {
-            System.out.println("Running command: python "+HL7ScannerPythonScriptName+" "+ip_address+" "+port+" "+" "+timeout);
-            ProcessBuilder pb = new ProcessBuilder("python",HL7ScannerPythonScriptName,ip_address,port,timeout);
-            Process p = pb.start();
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String ret1 = (in.readLine());
-
-            while(in.ready())
-            {
-                String ret = (in.readLine());
-                hl7scanner_console_textField.appendText(ret);
-                hl7scanner_console_textField.appendText("\n");
-            }
-            
-        }
-        catch(Exception e)
-        {
-            System.out.println(e);
-        }
-    }
-    */
     
     @FXML
     void onClickStartScanningAction(ActionEvent event) throws IOException  {
@@ -169,6 +139,32 @@ public class FXMLDocumentController implements Initializable {
         String repeat = hl7messenger_repeat_textField.getText();
         String port = hl7messenger_port_textField.getText();
         String message = hl7messenger_console_textField.getText();
+        String payloadValue ="";
+        
+        Pattern pythonPayload = Pattern.compile("\\$\\((.*?)\\)");
+        Matcher pythonPayloadMatcher = pythonPayload.matcher(message);
+        
+        
+        if(pythonPayloadMatcher.find())
+        {
+            System.out.println("Pattern Found");
+            System.out.println("Pattern is "+pythonPayloadMatcher.group(1));
+            String evalCommand = "python "+Helper_Eval_Script+" -e ";
+            String encodePaynloadEvalProcess = Base64.getEncoder().encodeToString(pythonPayloadMatcher.group(1).getBytes("utf-8"));
+
+            evalCommand = evalCommand +" "+encodePaynloadEvalProcess;
+            
+            Process payloadEvalProcess = runtimeProcess.exec(evalCommand);
+            
+            BufferedReader payloadEvalProcessOutput = new BufferedReader(new InputStreamReader(payloadEvalProcess.getInputStream()));
+            payloadValue = (payloadEvalProcessOutput.readLine());
+            System.out.println("Payload is: "+payloadValue);
+            
+            System.out.println("Final Output is: "+payloadValue);
+                    
+        }
+        
+        message = message.replaceAll("\\$\\((.*?)\\)", payloadValue);
         
         String hl7messenger_command="python "+HL7MessengerPythonScriptName+" -ip "+ip_address+" -p "+port+" -m "+message;
         
