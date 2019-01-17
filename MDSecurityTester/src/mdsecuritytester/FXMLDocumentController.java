@@ -248,7 +248,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     void hl7server_onClickStopServer(ActionEvent event) throws IOException {
         
-        String killCommand = "kill $(ps aux | grep python"+ " HL7ServerPythonScriptName "+ "| awk '{ print $2 }')";
+        String killCommand = "kill $(ps aux | grep python"+  HL7ServerPythonScriptName + "| awk '{ print $2 }')";
         
         System.out.println("Services killed");
         
