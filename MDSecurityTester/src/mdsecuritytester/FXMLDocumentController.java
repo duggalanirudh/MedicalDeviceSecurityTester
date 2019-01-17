@@ -79,7 +79,7 @@ public class FXMLDocumentController implements Initializable {
 
     //Python variables
     String HL7ScannerPythonScriptName = "HL7Scanner.py";
-    String HL7MessengerPythonScriptName = "hl7Messenger.py";
+    String HL7MessengerPythonScriptName = "HL7Messenger.py";
     String HL7ServerPythonScriptName = "HL7Server.py";
     
     //universal runtime declaration
@@ -128,9 +128,9 @@ public class FXMLDocumentController implements Initializable {
         String port = hl7scanner_port_textField.getText();
         
         //command to run HL7 Scanner
-        String hl7Scanner_command="python "+HL7ScannerPythonScriptName+" "+ip_address+" "+port+" "+timeout;
+        String hl7Scanner_command="python "+HL7ScannerPythonScriptName+" -ip "+ip_address+" -p "+port+" -t "+timeout;
         
-        System.out.println("Running command: python "+HL7ScannerPythonScriptName+" "+ip_address+" "+port+" "+" "+timeout);
+        System.out.println("Running command: "+hl7Scanner_command);
         
         Process p = runtimeProcess.exec(hl7Scanner_command);
         try
@@ -170,13 +170,13 @@ public class FXMLDocumentController implements Initializable {
         String port = hl7messenger_port_textField.getText();
         String message = hl7messenger_console_textField.getText();
         
-        String hl7messenger_command="python "+HL7MessengerPythonScriptName+" "+ip_address+" "+port+" "+message;
+        String hl7messenger_command="python "+HL7MessengerPythonScriptName+" -ip "+ip_address+" -p "+port+" -m "+message;
         
+        System.out.println("Running command: "+hl7messenger_command);
         Process p = runtimeProcess.exec(hl7messenger_command);
         
         try
         {
-            System.out.println("Running command: python "+HL7MessengerPythonScriptName+" "+ip_address+" "+port+" "+" "+message);
             //ProcessBuilder pb = new ProcessBuilder("python",HL7MessengerPythonScriptName,ip_address,port,message);
             //Process p = pb.start();
 
@@ -215,12 +215,12 @@ public class FXMLDocumentController implements Initializable {
         
         String hl7startServer_command= "python "+HL7ServerPythonScriptName+" "+ port +" "+message;
         
-        
+        System.out.println("Running command: "+hl7startServer_command);
         Process p = runtimeProcess.exec(hl7startServer_command);
         
         try
         {
-            System.out.println("Running command: python "+HL7ServerPythonScriptName+" "+port+" "+message);
+            
             //ProcessBuilder pb = new ProcessBuilder("python",HL7MessengerPythonScriptName,ip_address,port,message);
             //Process p = pb.start();
 
@@ -248,7 +248,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     void hl7server_onClickStopServer(ActionEvent event) throws IOException {
         
-        String killCommand = "kill $(ps aux | grep python HL7Server.py | awk '{ print $2 }')";
+        String killCommand = "kill $(ps aux | grep python"+ " HL7ServerPythonScriptName "+ "| awk '{ print $2 }')";
         
         System.out.println("Services killed");
         

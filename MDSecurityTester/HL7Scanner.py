@@ -57,9 +57,9 @@ def sendMessage(host,port):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='An HL7 protocol port scanner')
-    parser.add_argument('ip', help='Enter the IP address to scan')
-    parser.add_argument('port', type=int, help='specify one or more port, enter 0 to scan all ports')
-    parser.add_argument('timeout', help='enter time in seconds')
+    parser.add_argument('-ip','--ip', help='Enter the IP address to scan')
+    parser.add_argument('-p','--port', type=int, help='specify one or more port, enter 0 to scan all ports')
+    parser.add_argument('-t','--timeout', help='enter time in seconds')
 
     args = parser.parse_args()
 
