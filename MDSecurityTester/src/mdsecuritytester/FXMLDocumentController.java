@@ -209,6 +209,33 @@ public class FXMLDocumentController implements Initializable {
         String port = hl7server_port_textField.getText();
         String message = hl7server_message_textField.getText();
         
+        String payloadValue ="";
+        
+        Pattern pythonPayload = Pattern.compile("\\$\\((.*?)\\)");
+        Matcher pythonPayloadMatcher = pythonPayload.matcher(message);
+        
+        
+        if(pythonPayloadMatcher.find())
+        {
+            System.out.println("Pattern Found");
+            System.out.println("Pattern is "+pythonPayloadMatcher.group(1));
+            String evalCommand = "python "+Helper_Eval_Script+" -e ";
+            String encodePaynloadEvalProcess = Base64.getEncoder().encodeToString(pythonPayloadMatcher.group(1).getBytes("utf-8"));
+
+            evalCommand = evalCommand +" "+encodePaynloadEvalProcess;
+            
+            Process payloadEvalProcess = runtimeProcess.exec(evalCommand);
+            
+            BufferedReader payloadEvalProcessOutput = new BufferedReader(new InputStreamReader(payloadEvalProcess.getInputStream()));
+            payloadValue = (payloadEvalProcessOutput.readLine());
+            System.out.println("Payload is: "+payloadValue);
+            
+            System.out.println("Final Output is: "+payloadValue);
+                    
+        }
+        
+        message = message.replaceAll("\\$\\((.*?)\\)", payloadValue);
+        
         String hl7startServer_command= "python "+HL7ServerPythonScriptName+" "+ port +" "+message;
         
         System.out.println("Running command: "+hl7startServer_command);
