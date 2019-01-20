@@ -13,10 +13,13 @@ import java.util.Base64;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -80,6 +83,11 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button hl7server_btn_stop;
     
+    @FXML
+    private ComboBox <String> hl7Generator_messageSelector_comboBox;
+    
+    @FXML
+    private ComboBox <String> hl7Generator_messageVersion_comboBox;
 
     //Python variables
     String HL7ScannerPythonScriptName = "HL7Scanner.py";
@@ -294,7 +302,19 @@ public class FXMLDocumentController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
+        //initialize hl7Message Generator Tab
+        ObservableList<String> messageSelectorList = FXCollections.observableArrayList("ADT", "BAR","DFT","MDM","MFN","ORM","ORU","QRY","RAS","RDE","RGV","SIU");
+    
+        hl7Generator_messageSelector_comboBox.setItems(messageSelectorList);
+        hl7Generator_messageSelector_comboBox.setValue("ADT");
+        
+        
+        ObservableList <String> messageVersionSelectorList = FXCollections.observableArrayList("v2.1", "v2.2","v2.3","v2.3.1","v2.4","v2.5","v2.5.1","v2.6","v2.7","v2.8","v2.8.1");
+    
+        hl7Generator_messageVersion_comboBox.setItems(messageVersionSelectorList);
+        hl7Generator_messageVersion_comboBox.setValue("v2.7");
     }    
+    
     
 }

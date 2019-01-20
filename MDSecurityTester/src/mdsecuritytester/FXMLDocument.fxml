@@ -44,6 +44,18 @@
                </children></AnchorPane>
       </content>
     </Tab>
+      <Tab text="HL7 Generator">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <ComboBox fx:id="hl7Generator_messageSelector_comboBox" layoutX="479.0" layoutY="34.0" prefHeight="27.0" prefWidth="90.0" />
+                  <Label layoutX="14.0" layoutY="39.0" text="Select Message Version" />
+                  <ComboBox fx:id="hl7Generator_messageVersion_comboBox" layoutX="176.0" layoutY="34.0" prefHeight="27.0" prefWidth="85.0" />
+                  <Label layoutX="334.0" layoutY="39.0" text="Select Message Type" />
+               </children>
+            </AnchorPane>
+        </content>
+      </Tab>
       <Tab text="HL7 Server">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -58,5 +70,6 @@
                </children></AnchorPane>
         </content>
       </Tab>
+      
   </tabs>
 </TabPane>
