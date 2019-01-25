@@ -6,6 +6,7 @@
 package mdsecuritytester;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -22,6 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 
 
 /**
@@ -32,56 +34,59 @@ public class FXMLDocumentController implements Initializable {
     
     //button and text input declaration on HL7 Scanner Tab
     
-    @FXML
-    private Button hl7messenger_clear_response_console_btn;
-
-    @FXML
+     @FXML
     private TextField hl7scanner_ip_address_textField;
-
-    @FXML
-    private Button hl7scanner_clear_btn;
-
-    @FXML
-    private TextField hl7scanner_timeout_textField;
-
-    @FXML
-    private TextField hl7messenger_port_textField;
-
-    @FXML
-    private Button hl7messenger_messageSend_btn;
-
-    @FXML
-    private TextField hl7server_port_textField;
-
-    @FXML
-    private TextField hl7messenger_repeat_textField;
-
-    @FXML
-    private TextArea hl7server_message_textField;
-
-    @FXML
-    private TextField hl7messenger_ip_address_textField;
-
-    @FXML
-    private TextArea hl7messenger_console_textField;
-
-    @FXML
-    private TextArea hl7scanner_console_textField;
-
-    @FXML
-    private TextArea hl7server_console_textField;
-
-    @FXML
-    private Button hl7scanner_scan_btn;
-
-    @FXML
-    private TextArea hl7messenger_response_console_textField;
 
     @FXML
     private TextField hl7scanner_port_textField;
 
     @FXML
+    private TextField hl7scanner_timeout_textField;
+
+    @FXML
+    private Button hl7scanner_scan_btn;
+
+    @FXML
+    private TextArea hl7scanner_console_textField;
+
+    @FXML
+    private Button hl7scanner_clear_btn;
+
+    @FXML
+    private TextArea hl7messenger_console_textField;
+
+    @FXML
+    private TextField hl7messenger_ip_address_textField;
+
+    @FXML
+    private TextField hl7messenger_port_textField;
+
+    @FXML
+    private TextField hl7messenger_repeat_textField;
+
+    @FXML
+    private Button hl7messenger_messageSend_btn;
+
+    @FXML
+    private TextArea hl7messenger_response_console_textField;
+
+    @FXML
+    private Button hl7messenger_clear_response_console_btn;
+
+    @FXML
+    private TextField hl7server_port_textField;
+
+    @FXML
     private Button hl7server_btn_stop;
+
+    @FXML
+    private TextArea hl7server_message_textField;
+
+    @FXML
+    private TextArea hl7server_console_textField;
+    
+    @FXML
+    private TextArea analyzer_consoleOutput_textField;
     
     @FXML
     private ComboBox <String> hl7Generator_messageSelector_comboBox;
@@ -94,7 +99,7 @@ public class FXMLDocumentController implements Initializable {
     String HL7MessengerPythonScriptName = "HL7Messenger.py";
     String HL7ServerPythonScriptName = "HL7Server.py";
     String Helper_Eval_Script = "Eval.py";
-    
+    String HL7PcapAnalyzer = "HL7PcapAnalyzer.py";
     //universal runtime declaration
     Runtime runtimeProcess = Runtime.getRuntime();
     
@@ -297,6 +302,54 @@ public class FXMLDocumentController implements Initializable {
             p.destroy();
 
         }
+
+    }
+    
+      @FXML
+    void analyzer_selectPcapFileAction(ActionEvent event) throws IOException {
+        
+            FileChooser selectPcapFile = new FileChooser();
+            selectPcapFile.setTitle("Select PCAP file");
+            File selectedPcapFile = selectPcapFile.showOpenDialog(null);
+            
+            if(selectedPcapFile != null)
+            {
+                System.out.println("Selected file is "+selectedPcapFile.getAbsoluteFile());
+                
+                 String hl7startPcapAnalysis_command= "python "+HL7PcapAnalyzer+" -f "+selectedPcapFile;
+        
+                System.out.println("Running command: "+hl7startPcapAnalysis_command);
+                Process p = runtimeProcess.exec(hl7startPcapAnalysis_command);
+
+                try
+                {
+
+                    //ProcessBuilder pb = new ProcessBuilder("python",HL7MessengerPythonScriptName,ip_address,port,message);
+                    //Process p = pb.start();
+
+                    BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                    String ret1 = (in.readLine());
+
+                    while(in.ready())
+                    {
+                        String ret = (in.readLine());
+                        analyzer_consoleOutput_textField.appendText(ret);
+                        analyzer_consoleOutput_textField.appendText("\n");
+                    }
+
+                }        
+                catch(Exception e)
+                {
+                    System.out.println(e);
+                    
+
+                }
+                
+            }
+            else
+            {
+                System.out.println("No File Selected");
+            }
 
     }
     
