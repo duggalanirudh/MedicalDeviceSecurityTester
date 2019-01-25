@@ -1,26 +1,28 @@
 import argparse
-import dpkt
-from scapy.all import *
-import pprint
+import pyshark
+import networkx as nx
+import matplotlib.pyplot as plt
+
+
 
 def analyzerFile(pcapFilename):
 
-    print "Attempting to open the file: " + str(pcapFileName)
-    print(pcapFileName)
+    cap = pyshark.FileCapture(pcapFileName, only_summaries=True)
+    #cap = pyshark.FileCapture(pcapFileName)
 
-    packets = rdpcap(pcapFileName)
-    packetSession = packets.sessions()
+    print dir(cap[0])
 
-    for session in packetSession:
-        for packet in packetSession[session]:
-            print str(packet)
+    for hl7Packet in cap:
+        if hl7Packet.protocol =="HL7":
+            print hl7Packet._fields['Info'] +" source "+hl7Packet.source +" destination "+hl7Packet.destination
 
+def createHl7Graph():
+   
 
+    nx.draw(G)
+    plt.savefig("simple_path.png")  # save as png
+    plt.show()  # display
 
-    '''for k, v in packetSession.iteritems():
-        for p in v:
-            print p
-    '''
 
 if __name__ == '__main__':
 
@@ -31,5 +33,6 @@ if __name__ == '__main__':
     pcapFileName = args.file
     print ""
 
-    analyzerFile(pcapFileName)
+    #analyzerFile(pcapFileName)
+    createHl7Graph()
 
