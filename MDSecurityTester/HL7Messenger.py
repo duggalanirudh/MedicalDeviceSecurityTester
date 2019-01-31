@@ -24,7 +24,7 @@ def sendMessage(host,port,message):
         # create message here
         msg = start_block + message + end_block + carriage_return
 
-        print "sending message " + str(msg)
+        print("sending message " + str(msg))
         logging.info("Sending message: "+msg)
         # send message
         conn.send(msg)
@@ -35,19 +35,19 @@ def sendMessage(host,port,message):
             if ack:
                 writeAck = "Recieved a reply: "
                 writeAck = writeAck + " " + ack
-                print writeAck
+                print(writeAck)
                 logging.info(writeAck)
 
             else:
-                print "No reply  "
+                print("No reply  ")
                 logging.debug("No reply for the message")
         except BaseException as e:
 
-            print "Exception in python script " + e.message
+            print("Exception in python script " + e.message)
         conn.close()
     # send an exception if connection fails
     except socket.error:
-        print "This triggered an exception: Host maybe down, HL7 2.x not discovered on port " + str(port)
+        print("This triggered an exception: Host maybe down, HL7 2.x not discovered on port " + str(port))
 
 
 if __name__ == '__main__':
@@ -65,9 +65,9 @@ if __name__ == '__main__':
     if args.ip:
 
         host = args.ip
-        print host
+        print(host)
 
         if float(args.port) == 0 or not args.port:
-               print "Enter a port"
+               print("Enter a port")
         else:
             sendMessage(host,int(args.port),args.message)

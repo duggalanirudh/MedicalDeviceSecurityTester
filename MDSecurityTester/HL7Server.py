@@ -13,14 +13,14 @@ def startServer(port,message):
 
         serverSocket.listen(100)
 
-        print "Server running on the port "+ str(port)
+        print("Server running on the port "+ str(port))
 
         while True:
 
             connection, address = serverSocket.accept()
 
-            print "Got a connection from host at: ", str(address)
-            print message
+            print("Got a connection from host at: ", str(address))
+            print(message)
 
             connection.send(message)
 
@@ -43,12 +43,12 @@ if __name__ == '__main__':
     port = int(args.port)
     message = str(args.message)
 
-    print port
+    print(port)
 
     if float(args.port) != 0 or not args.port:
         startServer(port,message)
 
     else:
-        print "Enter port number"
+        print("Enter port number")
 
 
