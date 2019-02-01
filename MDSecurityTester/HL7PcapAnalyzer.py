@@ -10,14 +10,25 @@ def analyzerFile(pcapFilename):
     cap = pyshark.FileCapture(pcapFileName, only_summaries=True)
     #cap = pyshark.FileCapture(pcapFileName)
 
-    G = nx.Graph()
+    #sourcePacketList
+    sourcePacket=[]
+    destinationPacket=[]
+
+    G = nx.DiGraph(directed=True)
 
     #print dir(cap[0])
 
     for hl7Packet in cap:
         if hl7Packet.protocol =="HL7":
-            print(hl7Packet._fields['Info'] +" source "+hl7Packet.source +" destination "+hl7Packet.destination)
-            G.add_node(str(hl7Packet.source))
+            #print(hl7Packet._fields['Info'] +" source "+hl7Packet.source +" destination "+hl7Packet.destination)
+            if hl7Packet.source:
+                sourcePacket.append(hl7Packet.source)
+            if hl7Packet.destination:
+                destinationPacket.append(hl7Packet.destination)
+
+    for srcPkt in sourcePacket:
+        for destPkt in destinationPacket:
+            G.add_edge(srcPkt,destPkt)
 
     nx.draw(G, with_labels=True)
 
@@ -47,6 +58,6 @@ if __name__ == '__main__':
     pcapFileName = args.file
     print("")
 
-    #analyzerFile(pcapFileName)
-    createHl7Graph()
+    analyzerFile(pcapFileName)
+    #createHl7Graph()
 
