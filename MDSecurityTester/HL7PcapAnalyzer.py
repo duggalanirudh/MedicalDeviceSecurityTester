@@ -1,63 +1,46 @@
 import argparse
-import pyshark
 import networkx as nx
-import matplotlib.pyplot as plt
-
+from scapy.all import *
+import re
 
 
 def analyzerFile(pcapFilename):
 
-    cap = pyshark.FileCapture(pcapFileName, only_summaries=True)
-    #cap = pyshark.FileCapture(pcapFileName)
-
-    #sourcePacketList
-    sourcePacket=[]
-    destinationPacket=[]
-
     G = nx.DiGraph(directed=True)
 
-    #print dir(cap[0])
+    packets = rdpcap(pcapFileName)
+    networkSession = packets.sessions()
 
-    for hl7Packet in cap:
-        if hl7Packet.protocol =="HL7":
-            #print(hl7Packet._fields['Info'] +" source "+hl7Packet.source +" destination "+hl7Packet.destination)
-            if hl7Packet.source:
-                sourcePacket.append(hl7Packet.source)
-            if hl7Packet.destination:
-                destinationPacket.append(hl7Packet.destination)
-
-    for srcPkt in sourcePacket:
-        for destPkt in destinationPacket:
-            G.add_edge(srcPkt,destPkt)
+    for session in networkSession:
+        for packet in networkSession[session]:
+            try:
+                if packet[TCP]:
+                    if str(packet).startswith("b\""):
+                        '''
+                        print(packet)
+                        print("HL7 Data detected")
+                        print("Port: "+str(packet[TCP].sport))
+                        print("Source IP address: "+str(packet[IP].src))
+                        print("Destination IP address: " + str(packet[IP].dst))
+                        '''
+                        G.add_edge( (str(packet[IP].dst)+":"+str(packet[IP].dport)),(str(packet[IP].src)+":"+str(packet[TCP].sport)))
+            except:
+                continue
 
     nx.draw(G, with_labels=True)
-
     plt.show()
-
-def createHl7Graph():
-    G = nx.Graph()
-
-    G.add_node(2)
-    G.add_node(5)
-
-    G.add_edge(2,5)
-    G.add_edge(4,1)
-
-    print(nx.info(G))
-
-    nx.draw(G,with_labels=True)
-
-    plt.show()
+    plt.savefig("networkGraph.png",format="PNG")
 
 if __name__ == '__main__':
+    print("im here")
+    print("im here")
 
     parser = argparse.ArgumentParser(description='An HL7 PCAP Analyzer')
     parser.add_argument('-f','--file', required=True,  help='Enter the filename')
 
     args = parser.parse_args()
     pcapFileName = args.file
-    print("")
-
     analyzerFile(pcapFileName)
-    #createHl7Graph()
+
+
 
